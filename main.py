@@ -10,6 +10,7 @@ def show_menu():
 
         print("\n".join(menu))  
 
+
 def add_task(tasks):
     title = input("Enter task title: ")
     task = {
@@ -28,6 +29,23 @@ def list_tasks(tasks):
         status = "✓" if task["done"] else " "
         print(f"{index}. [{status}] {task["title"]}")  
 
+
+def get_task_index(prompt, tasks):
+    try:
+        task_number = int(input(prompt))
+        index = task_number - 1
+
+        if index < 0 or index >= len(tasks):
+            print("Invalid task number.")
+            return None
+        
+        return index
+    
+    except ValueError:
+        print("Please enter a valid number.")
+        return None
+
+
 def mark_task_done(tasks):
     if not tasks:
         print("No tasks to mark.")
@@ -35,19 +53,13 @@ def mark_task_done(tasks):
     
     list_tasks(tasks)
 
-    try:
-        task_number = int(input("Enter task number to mark as done: "))
-        index = task_number - 1
-
-        if index < 0 or index >= len(tasks):
-            print("Invalid task number")
-            return
+    index = get_task_index("Enter task number to mark as done: ")
+    if index is None:
+        return
         
-        tasks[index]["done"] = True
-        print("Task marked as done.")
+    tasks[index]["done"] = True
+    print("Task marked as done.")
 
-    except ValueError:
-        print("Please enter a valid numnber.")
 
 def delete_task(tasks):
     if not tasks:
@@ -56,19 +68,13 @@ def delete_task(tasks):
     
     list_tasks(tasks)
 
-    try:
-        task_number = int(input("Enter task number to delete: "))
-        index = task_number - 1
+    index = get_task_index("Enter task number to mark as done: ")
+    if index is None:
+        return
 
-        if index < 0 or index >= len(tasks):
-            print("Invalid task number")
-            return
-        
-        deleted_task = tasks.pop(index)
-        print(f"Deleted task: {deleted_task["title"]}")
+    deleted_task = tasks.pop(index)
+    print(f"Deleted task: {deleted_task["title"]}")
 
-    except ValueError:
-        print("Please enter a valid numnber.")
 
 def main():
     tasks = []
