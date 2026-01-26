@@ -1,13 +1,15 @@
 from task import Task
+from storage import save_tasks, load_tasks
 
 class TaskManager:
     def __init__(self):
-        self.tasks = []
+        self.tasks = load_tasks()
 
     def add_task(self):
         title = input("Enter task title: ")
         task = Task(title)
         self.tasks.append(task)
+        save_tasks(self.tasks)
         print("Task added.")
 
     def list_tasks(self):
@@ -46,6 +48,7 @@ class TaskManager:
             return
             
         self.tasks[index].done = True
+        save_tasks(self.tasks)
         print("Task marked as done.")
 
     def delete_task(self):
@@ -60,4 +63,5 @@ class TaskManager:
             return
 
         deleted_task = self.tasks.pop(index)
+        save_tasks(self.tasks)
         print(f"Deleted task: {deleted_task.title}")
