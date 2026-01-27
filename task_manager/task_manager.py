@@ -1,9 +1,9 @@
-from task import Task
-from storage import save_tasks, load_tasks
+from task_manager.task import Task
+from task_manager.storage import save_tasks, load_tasks
 
 class TaskManager:
-    def __init__(self):
-        self.tasks = load_tasks()
+    def __init__(self, tasks=None):
+        self.tasks = tasks if tasks is not None else load_tasks()
 
     def add_task(self):
         title = input("Enter task title: ")

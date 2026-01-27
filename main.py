@@ -1,9 +1,9 @@
-from task_manager import TaskManager
+from task_manager.task_manager import TaskManager
 
 
 def show_menu():
         menu = [
-            "Task Manager",
+            "\nTask Manager",
             "1. Add task",
             "2. List tasks",
             "3. Mark task as done",

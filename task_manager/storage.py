@@ -1,6 +1,6 @@
 import json
 import os
-from task import Task
+from task_manager.task import Task
 
 
 DATA_DIR = "data"
