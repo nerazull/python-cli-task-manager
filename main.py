@@ -1,4 +1,5 @@
 from task_manager.task_manager import TaskManager
+import argparse
 
 
 def show_menu():
@@ -13,28 +14,40 @@ def show_menu():
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Simple CLI Task Manager")
+
+    subparsers = parser.add_subparsers(dest="command")
+
+    # Add command
+    add_parser = subparsers.add_parser("add", help="Add a new task")
+    add_parser.add_argument("title", help="Title of the task")
+
+    # List command
+    subparsers.add_parser("list", help="List all tasks")
+
+    # Done command
+    done_parser = subparsers.add_parser("done", help="Mark a task as done")
+    done_parser.add_argument("index", type=int, help="Task number")
+
+    # Delete command
+    delete_parser = subparsers.add_parser("delete", help="Delete a task")
+    delete_parser.add_argument("index", type=int, help="Task number")
+
+    args = parser.parse_args()
+
     task_manager = TaskManager()
 
-    while True:
-        show_menu()
-        choice = input("Choose an option: ").strip()
-        if not choice:
-            print("Please enter a choice.")
-            continue
+    if args.command == "add":
+        task_manager.add_task_from_cli(args.title)
+    elif args.command == "list":
+        task_manager.list_tasks()
+    elif args.command == "done":
+        task_manager.mark_task_done_from_cli(args.index)
+    elif args.command == "delete":
+        task_manager.delete_task_from_cli(args.index)
+    else:
+        parser.print_help()
 
-        if choice == "1":
-            task_manager.add_task()
-        elif choice == "2":
-            task_manager.list_tasks()
-        elif choice == "3":
-            task_manager.mark_task_done()
-        elif choice == "4":
-            task_manager.delete_task()
-        elif choice.lower() == "5":
-            print("Goodbye!")
-            break
-        else:
-            print("Invalid option. Try again.")
 
 if __name__ == "__main__":
     main()

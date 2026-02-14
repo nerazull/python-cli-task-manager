@@ -5,8 +5,7 @@ class TaskManager:
     def __init__(self, tasks=None):
         self.tasks = tasks if tasks is not None else load_tasks()
 
-    def add_task(self):
-        title = input("Enter task title: ")
+    def add_task_from_cli(self, title):
         task = Task(title)
         self.tasks.append(task)
         save_tasks(self.tasks)
@@ -36,32 +35,24 @@ class TaskManager:
             print("Please enter a valid number.")
             return None
         
-    def mark_task_done(self):
-        if not self.tasks:
-            print("No tasks to mark.")
+    def mark_task_done_from_cli(self, task_number):
+        index = task_number - 1
+
+        if index < 0 or index >= len(self.tasks):
+            print("Invalid task number.")
             return
         
-        self.list_tasks()
-
-        index = self.get_task_index("Enter task number to mark as done: ")
-        if index is None:
-            return
-            
         self.tasks[index].done = True
         save_tasks(self.tasks)
         print("✓ Task marked as done.")
 
-    def delete_task(self):
-        if not self.tasks:
-            print("No tasks to delete.")
+    def delete_task_from_cli(self, task_number):
+        index = task_number - 1
+
+        if index < 0 or index >= len(self.tasks):
+            print("Invalid task number.")
             return
         
-        self.list_tasks()
-
-        index = self.get_task_index("Enter task number to delete: ")
-        if index is None:
-            return
-
-        deleted_task = self.tasks.pop(index)
+        deleted = self.tasks.pop(index)
         save_tasks(self.tasks)
-        print(f"Deleted task: {deleted_task.title}")
+        print(f"✓ Deleted task: {deleted.title}")
