@@ -15,12 +15,15 @@ class TaskManager:
         save_tasks(self.tasks)
         print(f"✓ Task added with priority '{priority}'.")
 
+    def get_sorted_tasks(self):
+        return sorted(self.tasks, key=lambda task: PRIORITY_ORDER.get(task.priority, 2), reverse=True)
+
     def list_tasks(self):
         if not self.tasks:
             print("No tasks yet.")
             return
         
-        sorted_tasks = sorted(self.tasks, key=lambda task: PRIORITY_ORDER.get(task.priority, 2), reverse=True)
+        sorted_tasks = self.get_sorted_tasks()
         
         for index, task in enumerate(sorted_tasks, start=1):
             status = "✓" if task.done else " "
@@ -42,24 +45,24 @@ class TaskManager:
             print("Please enter a valid number.")
             return None
         
-    def mark_task_done_from_cli(self, task_number):
-        index = task_number - 1
+    def mark_task_done_from_cli(self, index):
+        sorted_tasks = self.get_sorted_tasks()
 
-        if index < 0 or index >= len(self.tasks):
-            print("Invalid task number.")
-            return
+        try:
+            task = sorted_tasks[index - 1]
+            task.done = True
+            save_tasks(self.tasks)
+            print("Task marked as done.")
+        except IndexError:
+            print("Invalid task index.")
+
+    def delete_task_from_cli(self, index):
+        sorted_tasks = self.get_sorted_tasks()
         
-        self.tasks[index].done = True
-        save_tasks(self.tasks)
-        print("✓ Task marked as done.")
-
-    def delete_task_from_cli(self, task_number):
-        index = task_number - 1
-
-        if index < 0 or index >= len(self.tasks):
-            print("Invalid task number.")
-            return
-        
-        deleted = self.tasks.pop(index)
-        save_tasks(self.tasks)
-        print(f"✓ Deleted task: {deleted.title}")
+        try:
+            task_to_delete = sorted_tasks[index-1]
+            self.tasks.remove(task_to_delete)
+            save_tasks(self.tasks)
+            print("Task deleted successfully.")
+        except IndexError:
+            print("Invalid task index.")
