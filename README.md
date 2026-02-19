@@ -56,8 +56,8 @@ main.py              # Application entry point
 
 ## Possible Improvements
 
-- ✓ Add command-line arguments using argparse
-- ✓ Add task priorities and due dates
+- [x] Add command-line arguments using argparse
+- [x] Add task priorities and due dates
 - [ ] Improve test coverage
-- ✓ Add confirmation prompts for destructive actions
+- [x] Add confirmation prompts for destructive actions
 - [ ] Package the project for installation
