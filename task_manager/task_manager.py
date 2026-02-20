@@ -56,15 +56,16 @@ class TaskManager:
         except IndexError:
             print("Invalid task index.")
 
-    def delete_task_from_cli(self, index):
+    def delete_task_from_cli(self, index, force=False):
         sorted_tasks = self.get_sorted_tasks()
         
         try:
             task_to_delete = sorted_tasks[index-1]
 
-            if not self._confirm_action(f" Delete task '{task_to_delete.title}'?"):
-                print("Deletion cancelled.")
-                return
+            if not force:
+                if not self._confirm_action(f" Delete task '{task_to_delete.title}'?"):
+                    print("Deletion cancelled.")
+                    return
             
             self.tasks.remove(task_to_delete)
             save_tasks(self.tasks)
@@ -73,14 +74,15 @@ class TaskManager:
         except IndexError:
             print("Invalid task index.")
 
-    def clear_tasks(self):
+    def clear_tasks(self, force=False):
         if not self.tasks:
             print("No tasks to clear.")
             return
         
-        if not self._confirm_action("Delete ALL tasks?"):
-            print("Clear cancelled.")
-            return
+        if not force:
+            if not self._confirm_action("Clear ALL tasks?"):
+                print("Clear cancelled.")
+                return
         
         self.tasks.clear()
         save_tasks(self.tasks)
