@@ -18,17 +18,25 @@ class TaskManager:
     def get_sorted_tasks(self):
         return sorted(self.tasks, key=lambda task: PRIORITY_ORDER.get(task.priority, 2), reverse=True)
 
-    def list_tasks(self):
+    def list_tasks(self, priority_filter=None):
         if not self.tasks:
             print("No tasks yet.")
             return
         
-        sorted_tasks = self.get_sorted_tasks()
+        filtered_tasks = self.tasks
+
+        if priority_filter:
+            filtered_tasks = [task for task in self.tasks if task.priority == priority_filter]
+
+        if not filtered_tasks:
+            print("No matching tasks found.")
+
+        sorted_tasks = sorted(filtered_tasks, key=lambda task: PRIORITY_ORDER.get(task.priority, 2), reverse=True)
         
         for index, task in enumerate(sorted_tasks, start=1):
             status = "✓" if task.done else " "
             due_info = f" - Due: {task.due_date}" if task.due_date else ""
-            print(f"{index}. [{status}] ({task.priority.upper()}) {task.title}{due_info}")  
+            print(f"{index}. [{status}] {task.title} ({task.priority}){due_info}")
 
     def get_task_index(self, prompt):
         try:

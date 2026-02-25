@@ -62,3 +62,16 @@ def test_delete_task_with_confirmation():
         manager.delete_task_from_cli(1)
 
     assert manager.tasks == []
+
+
+def test_filter_tasks_by_priority():
+    task1 = Task("Low task", priority="low")
+    task2 = Task("High task", priority="high")
+    task3 = Task("Another high task", priority="high")
+
+    manager = TaskManager(tasks=[task1, task2, task3])
+
+    filtered = [task for task in manager.tasks if task.priority == "high"]
+
+    assert len(filtered) == 2
+    assert all(task.priority == "high" for task in filtered)

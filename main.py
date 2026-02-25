@@ -14,7 +14,8 @@ def main():
     add_parser.add_argument("--due", help="Due date in format YYYY-MM-DD")
 
     # List command
-    subparsers.add_parser("list", help="List all tasks")
+    list_parser = subparsers.add_parser("list", help="List all tasks")
+    list_parser.add_argument("--priority", choices=["low", "medium", "high"], help="Filter by priority")
 
     # Done command
     done_parser = subparsers.add_parser("done", help="Mark a task as done")
@@ -36,7 +37,7 @@ def main():
     if args.command == "add":
         task_manager.add_task_from_cli(args.title, args.priority, due_date=args.due)
     elif args.command == "list":
-        task_manager.list_tasks()
+        task_manager.list_tasks(priority_filter=args.priority)
     elif args.command == "done":
         task_manager.mark_task_done_from_cli(args.index)
     elif args.command == "delete":
