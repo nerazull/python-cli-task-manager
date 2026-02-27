@@ -39,9 +39,9 @@ def main():
     elif args.command == "list":
         task_manager.list_tasks(priority_filter=args.priority)
     elif args.command == "done":
-        task_manager.mark_task_done_from_cli(args.index)
+        task_manager.mark_task_done_from_cli(args.index, priority_filter=args.priority)
     elif args.command == "delete":
-        task_manager.delete_task_from_cli(args.index, force=args.force)
+        task_manager.delete_task_from_cli(args.index, priority_filter=args.priority, force=args.force)
     elif args.command == "clear":
         task_manager.clear_tasks(force=args.force)
     else:

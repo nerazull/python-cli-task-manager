@@ -75,3 +75,16 @@ def test_filter_tasks_by_priority():
 
     assert len(filtered) == 2
     assert all(task.priority == "high" for task in filtered)
+
+
+def test_delete_uses_sorted_index():
+    low = Task("Low", priority="low")
+    high = Task("High", priority="high")
+
+    manager = TaskManager(tasks=[low, high])
+
+    # High should appear first when sorted
+    manager.delete_task_from_cli(1, force=True)
+
+    assert len(manager.tasks) == 1
+    assert manager.tasks[0].title == "Low"
