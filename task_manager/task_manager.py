@@ -1,5 +1,6 @@
 from task_manager.task import Task
 from task_manager.storage import save_tasks, load_tasks
+from datetime import date
 
 
 PRIORITY_ORDER = {"high": 3, "medium": 2, "low": 1}
@@ -45,8 +46,8 @@ class TaskManager:
             print("Please enter a valid number.")
             return None
         
-    def mark_task_done_from_cli(self, index, priority_filter=None):
-        visible_tasks = self.get_visible_tasks(priority_filter)
+    def mark_task_done_from_cli(self, index):
+        visible_tasks = self.get_visible_tasks()
 
         try:
             task = visible_tasks[index - 1]
@@ -56,8 +57,8 @@ class TaskManager:
         except IndexError:
             print("Invalid task index.")
 
-    def delete_task_from_cli(self, index, priority_filter=None, force=False):
-        visible_tasks = self.get_visible_tasks(priority_filter)
+    def delete_task_from_cli(self, index, force=False):
+        visible_tasks = self.get_visible_tasks()
         
         try:
             task_to_delete = visible_tasks[index - 1]
@@ -100,3 +101,22 @@ class TaskManager:
 
         return sorted(filtered_tasks, key=lambda task: PRIORITY_ORDER.get(task.priority, 2), reverse=True)
         
+    def show_stats(self):
+        total = len(self.tasks)
+        completed = sum(1 for task in self.tasks if task.done)
+        pending = total - completed
+
+        high = sum(1 for task in self.tasks if task.priority == "high")
+        medium = sum(1 for task in self.tasks if task.priority == "medium")
+        low = sum(1 for task in self.tasks if task.priority == "low")
+
+        today = date.today().isoformat()
+        overdue = sum(1 for task in self.tasks if task.due_date and task.due_date < today and not task.done)
+
+        print(f"Total tasks: {total}")
+        print(f"Completed: {completed}")
+        print(f"Pending: {pending}")
+        print(f"High priority: {high}")
+        print(f"Medium priority: {medium}")
+        print(f"Low priority: {low}")
+        print(f"Overdue: {overdue}")

@@ -30,6 +30,9 @@ def main():
     clear_parser = subparsers.add_parser("clear", help="Clear all tasks")
     clear_parser.add_argument("--force", action="store_true", help="Clear all tasks without confirmation")
 
+    # Stats command
+    subparsers.add_parser("stats", help="Show task statistics")
+
     args = parser.parse_args()
 
     task_manager = TaskManager()
@@ -39,11 +42,13 @@ def main():
     elif args.command == "list":
         task_manager.list_tasks(priority_filter=args.priority)
     elif args.command == "done":
-        task_manager.mark_task_done_from_cli(args.index, priority_filter=args.priority)
+        task_manager.mark_task_done_from_cli(args.index)
     elif args.command == "delete":
-        task_manager.delete_task_from_cli(args.index, priority_filter=args.priority, force=args.force)
+        task_manager.delete_task_from_cli(args.index, force=args.force)
     elif args.command == "clear":
         task_manager.clear_tasks(force=args.force)
+    elif args.command == "stats":
+        task_manager.show_stats()
     else:
         parser.print_help()
 

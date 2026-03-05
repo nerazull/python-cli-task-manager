@@ -88,3 +88,19 @@ def test_delete_uses_sorted_index():
 
     assert len(manager.tasks) == 1
     assert manager.tasks[0].title == "Low"
+
+
+def test_stats_counts_tasks(capsys):
+    task1 = Task("Task 1", priority="high")
+    task2 = Task("Task 2", priority="low")
+    task2.done = True
+
+    manager = TaskManager(tasks=[task1, task2])
+
+    manager.show_stats()
+
+    captured = capsys.readouterr()
+
+    assert "Total tasks: 2" in captured.out
+    assert "Completed: 1" in captured.out
+    assert "Pending: 1" in captured.out
